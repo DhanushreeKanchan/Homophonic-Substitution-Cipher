@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive homophonic substitution cipher simulator with stunning visual effects and step-by-step encryption demonstration.">
+    <title>Homophonic Substitution Cipher Simulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ffd700;
+            --secondary: #4a148c;
+            --accent: #7b2cbf;
+            --dark-blue: #0a0e27;
+            --deep-purple: #1a0033;
+            --gold: #ffd700;
+            --light-gold: #ffe57f;
+            --cyber-blue: #00d4ff;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            color: #e0e7ff;
+            overflow-x: hidden;
+            background: #000;
+        }
+
+        /* Advanced Animated Background */
+        .hero-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        /* Layered Background Elements */
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Base gradient layer */
+        .gradient-layer {
+            background: radial-gradient(ellipse at top, #1a0033, #0a0e27 50%, #000000);
+            animation: gradientShift 20s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Parchment texture overlay */
+        .parchment-layer {
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 215, 0, 0.02) 2px, rgba(255, 215, 0, 0.02) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(139, 69, 19, 0.03) 2px, rgba(139, 69, 19, 0.03) 4px);
+            opacity: 0.3;
+            mix-blend-mode: overlay;
+        }
+
+        /* Circuit pattern layer */
+        .circuit-layer {
+            background-image: 
+                linear-gradient(90deg, transparent 95%, rgba(0, 212, 255, 0.1) 95%),
+                linear-gradient(0deg, transparent 95%, rgba(123, 44, 191, 0.1) 95%);
+            background-size: 50px 50px;
+            opacity: 0.2;
+            animation: circuitFlow 30s linear infinite;
+        }
+
+        @keyframes circuitFlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        /* Cryptographic symbols floating */
+        .symbols-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .crypto-symbol {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            color: rgba(255, 215, 0, 0.15);
+            animation: float 20s linear infinite;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Binary code streams */
+        .binary-stream {
+            position: absolute;
+            top: -100%;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: rgba(0, 212, 255, 0.3);
+            white-space: nowrap;
+            animation: streamDown 15s linear infinite;
+            text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+        }
+
+        @keyframes streamDown {
+            0% {
+                top: -100%;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* Lock and Key animations */
+        .security-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .lock-icon, .key-icon {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0;
+            animation: lockAppear 8s ease-in-out infinite;
+        }
+
+        @keyframes lockAppear {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0.5) rotate(0deg);
+            }
+            50% {
+                opacity: 0.2;
+                transform: scale(1) rotate(180deg);
+            }
+        }
+
+        /* Morphing cipher display */
+        .cipher-morph {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 60px;
+            font-family: 'Courier New', monospace;
+            color: rgba(255, 215, 0, 0.2);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            animation: morphCipher 6s ease-in-out infinite;
+        }
+
+        @keyframes morphCipher {
+            0%, 100% { content: 'A'; opacity: 0.2; }
+            25% { content: '→'; opacity: 0.4; }
+            50% { content: '23'; opacity: 0.3; }
+            75% { content: '→'; opacity: 0.4; }
+        }
+
+        /* Quote overlay */
+        .quote-overlay {
+            position: absolute;
+            top: 30%;
+            width: 100%;
+            text-align: center;
+            font-size: clamp(16px, 3vw, 24px);
+            font-style: italic;
+            color: rgba(255, 215, 0, 0.15);
+            padding: 0 2rem;
+            animation: fadeQuote 15s ease-in-out infinite;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+
+        @keyframes fadeQuote {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            10%, 90% { opacity: 0.3; transform: translateY(0); }
+        }
+
+        /* Interactive cipher visualization */
+        .interactive-cipher {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+        }
+
+        .cipher-char {
+            font-size: 40px;
+            padding: 15px 25px;
+            background: rgba(123, 44, 191, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            animation: charPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes charPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+            50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
+        }
+
+        .cipher-arrow {
+            font-size: 30px;
+            color: var(--cyber-blue);
+            animation: arrowGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes arrowGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; text-shadow: 0 0 20px var(--cyber-blue); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 14, 39, 0.9);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 30px rgba(255, 215, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--light-gold);
+            text-decoration: none;
+            font-weight: 600;
+            font-family: 'Georgia', serif;
+            transition: all 0.3s ease;
+            position: relative;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+        }
+
+        nav a:hover {
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--cyber-blue));
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            max-width: 1000px;
+            background: rgba(10, 14, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 10px 50px rgba(255, 215, 0, 0.1);
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--gold), var(--light-gold), var(--gold));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+            font-family: 'Georgia', serif;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--light-gold);
+            margin-bottom: 2rem;
+            font-style: italic;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            color: var(--gold);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 25px rgba(255, 215, 0, 0.3);
+            border: 2px solid var(--gold);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 50px rgba(255, 215, 0, 0.6);
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+        }
+
+        /* Content Sections */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 2rem;
+            color: var(--gold);
+            position: relative;
+            display: inline-block;
+            font-family: 'Georgia', serif;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), transparent);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        h3 {
+            color: var(--gold);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.5rem;
+            font-family: 'Georgia', serif;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .card {
+            background: rgba(26, 0, 51, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(123, 44, 191, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-box {
+            background: linear-gradient(135deg, rgba(123, 44, 191, 0.2), rgba(26, 0, 51, 0.3));
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(123, 44, 191, 0.2);
+        }
+
+        .feature-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(255, 215, 0, 0.4);
+            border-color: var(--gold);
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+        }
+
+        /* Simulator Section */
+        .simulator {
+            background: rgba(26, 0, 51, 0.7);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: 0 10px 50px rgba(255, 215, 0, 0.2);
+            backdrop-filter: blur(15px);
+        }
+
+        .simulator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 3rem;
+            margin: 2rem 0;
+        }
+
+        .simulator-box {
+            background: rgba(10, 14, 39, 0.8);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(123, 44, 191, 0.3);
+        }
+
+        .simulator-box:hover {
+            border-color: var(--gold);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .input-group {
+            margin: 1.5rem 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            color: var(--light-gold);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        button {
+            padding: 0.9rem 2rem;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+            font-size: 1rem;
+            box-shadow: 0 3px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 25px rgba(255, 215, 0, 0.5);
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .animation-container {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .process-step {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+            text-align: center;
+            width: 100%;
+        }
+
+        .process-step.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .char-animation {
+            display: inline-block;
+            margin: 0.5rem;
+            padding: 1rem;
+            background: rgba(123, 44, 191, 0.2);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            animation: pulse 1s ease infinite;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
+        }
+
+        .arrow {
+            color: var(--cyber-blue);
+            font-size: 2rem;
+            margin: 1rem 0;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .key-display {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 20px rgba(123, 44, 191, 0.3);
+        }
+
+        .key-display pre {
+            color: var(--light-gold);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .procedure-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+
+        .procedure-list li {
+            counter-increment: step-counter;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            background: rgba(123, 44, 191, 0.1);
+            border-left: 4px solid var(--gold);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(123, 44, 191, 0.2);
+        }
+
+        .procedure-list li:hover {
+            background: rgba(123, 44, 191, 0.2);
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .procedure-list li::before {
+            content: "Step " counter(step-counter);
+            display: block;
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        footer {
+            background: rgba(10, 14, 39, 0.9);
+            padding: 2rem;
+            text-align: center;
+            border-top: 2px solid rgba(255, 215, 0, 0.2);
+            color: var(--light-gold);
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+            }
+
+            section {
+                padding: 3rem 1rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .simulator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .simulator {
+                padding: 1.5rem;
+            }
+
+            .interactive-cipher {
+                bottom: 5%;
+                gap: 15px;
+            }
+
+            .cipher-char {
+                font-size: 30px;
+                padding: 10px 15px;
+            }
+
+            .quote-overlay {
+                font-size: 14px;
+                padding: 0 1rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--deep-purple);
+            border-left: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--gold), var(--accent));
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--light-gold), var(--gold));
+        }
+    </style>
+</head>
+<body>
+    <!-- Advanced Animated Background -->
+    <div class="hero-background">
+        <!-- Gradient Base -->
+        <div class="bg-layer gradient-layer"></div>
+        
+        <!-- Parchment Texture -->
+        <div class="bg-layer parchment-layer"></div>
+        
+        <!-- Circuit Pattern -->
+        <div class="bg-layer circuit-layer"></div>
+        
+        <!-- Cryptographic Symbols -->
+        <div class="bg-layer symbols-layer" id="symbolsLayer"></div>
+        
+        <!-- Binary Streams -->
+        <div class="bg-layer" id="binaryLayer"></div>
+        
+        <!-- Security Icons -->
+        <div class="bg-layer security-icons" id="securityIcons"></div>
+        
+        <!-- Famous Quotes -->
+        <div class="quote-overlay" id="quoteOverlay"></div>
+        
+        <!-- Interactive Cipher Visualization -->
+        <div class="interactive-cipher" id="interactiveCipher">
+            <div class="cipher-char" id="char1">A</div>
+            <div class="cipher-arrow">→</div>
+            <div class="cipher-char" id="char2">23</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav role="navigation">
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#aim">Aim</a></li>
+            <li><a href="#objective">Objective</a></li>
+            <li><a href="#procedure">Procedure</a></li>
+            <li><a href="#applications">Applications</a></li>
+            <li><a href="#advantages">Advantages</a></li>
+            <li><a href="#simulation">Simulation</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Homophonic Substitution Cipher</h1>
+            <p class="subtitle">Where Letters Dance in Shadows of Secrecy</p>
+            <p style="max-width: 700px; margin: 2rem auto; line-height: 1.8;">
+                Step into the enigmatic world of cryptographic mastery, where ancient wisdom meets modern security. Discover how a single letter can wear many masks, concealing secrets through the art of homophonic substitution.
+            </p>
+            <a href="#simulation" class="cta-button">Begin Your Journey</a>
+        </div>
+    </section>
+
+    <!-- Aim Section -->
+    <section id="aim">
+        <h2>Aim</h2>
+        <div class="card">
+            <p style="font-size: 1.2rem; line-height: 1.8;">
+                To master the <strong>Homophonic Substitution Cipher</strong>—an elegant cryptographic technique that assigns multiple disguises to frequently occurring letters, creating an impenetrable veil against frequency analysis while preserving the essence of secure communication through the ages.
+            </p>
+        </div>
+    </section>
+
+    <!-- Objective Section -->
+    <section id="objective">
+        <h2>Objective</h2>
+        <div class="grid">
+            <div class="feature-box">
+                <div class="icon">🎯</div>
+                <h3>Master Cipher Mechanics</h3>
+                <p>Understand the intricate dance of homophones, where each character's frequency determines its wardrobe of disguises.</p>
+            </div>
+            
+            <div class="feature-box">
+                <div class="icon">🔐</div>
+                <h3>Craft Encrypted Messages</h3>
+                <p>Learn to weave plaintext into ciphertext, randomly selecting from each letter's repertoire of symbols.</p>
+            </div>
+            
+            <div class="feature-box">
+                <div class="icon">🔓</div>
+                <h3>Unveil Hidden Truths</h3>
+                <p>Decode encrypted messages by mapping cipher symbols back to their original letters with precision.</p>
+            </div>
+            
+            <div class="feature-box">
+                <div class="icon">📊</div>
+                <h3>Analyze Cryptographic Strength</h3>
+                <p>Examine how homophonic substitution defeats frequency analysis through statistical camouflage.</p>
+            </div>
+            
+            <div class="feature-box">
+                <div class="icon">🔬</div>
+                <h3>Compare Cipher Methods</h3>
+                <p>Discover why multiple homophones create superior security compared to simple substitution techniques.</p>
+            </div>
+            
+            <div class="feature-box">
+                <div class="icon">⚡</div>
+                <h3>Practice Your Craft</h3>
+                <p>Gain hands-on experience through immersive simulation with real-time visualization of encryption magic.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Procedure Section -->
+    <section id="procedure">
+        <h2>Procedure / Steps</h2>
+        <div class="card">
+            <h3>The Art of Encryption</h3>
+            <ol class="procedure-list">
+                <li>
+                    <strong>Analyze Letter Frequency:</strong> Study the rhythm of language—discover which letters appear most frequently in English. The common 'E' shall receive many disguises, while rare 'Z' needs but one.
+                </li>
+                <li>
+                    <strong>Forge the Cipher Key:</strong> Assign multiple cipher symbols to each letter, proportional to its frequency. Let frequent letters wear many masks to confound the enemy.
+                </li>
+                <li>
+                    <strong>Inscribe Your Message:</strong> Enter the plaintext you wish to protect within the sacred encryption chamber.
+                </li>
+                <li>
+                    <strong>Invoke Randomness:</strong> For each character, let chance select one disguise from its collection of homophones—no pattern shall betray you.
+                </li>
+                <li>
+                    <strong>Manifest the Ciphertext:</strong> Watch as each plaintext character transforms into its chosen cipher symbol, creating an encrypted message.
+                </li>
+                <li>
+                    <strong>Preserve the Key:</strong> Guard your cipher key with utmost secrecy, for it alone holds the power to reveal hidden truths.
+                </li>
+            </ol>
+
+            <h3 style="margin-top: 3rem;">The Path of Decryption</h3>
+            <ol class="procedure-list">
+                <li>
+                    <strong>Summon the Key:</strong> Retrieve the sacred cipher key that was forged during encryption—the reverse mapping of truth.
+                </li>
+                <li>
+                    <strong>Present the Ciphertext:</strong> Enter the encrypted message into the decryption sanctum.
+                </li>
+                <li>
+                    <strong>Parse the Symbols:</strong> Separate the ciphertext into individual cipher symbols, each representing a hidden letter.
+                </li>
+                <li>
+                    <strong>Consult the Oracle:</strong> For each cipher symbol, consult the reverse key to discover its true identity.
+                </li>
+                <li>
+                    <strong>Restore the Message:</strong> Weave together the decrypted characters to resurrect the original plaintext.
+                </li>
+                <li>
+                    <strong>Verify the Truth:</strong> Compare the revealed message with expectations to ensure the cipher's integrity.
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Applications Section -->
+    <section id="applications">
+        <h2>Applications Through the Ages</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>🏛️ Diplomatic Secrets</h3>
+                <p>From Renaissance courts to Enlightenment palaces, European powers wielded homophonic ciphers to safeguard treaties and conspiracies. The Vatican and Venice mastered these arts.</p>
+            </div>
+            
+            <div class="card">
+                <h3>🎖️ Battlefield Communications</h3>
+                <p>Generals encrypted battle strategies and troop movements, knowing their homophonic ciphers would resist the cryptanalytic techniques of their era.</p>
+            </div>
+            
+            <div class="card">
+                <h3>🕵️ Espionage & Intelligence</h3>
+                <p>Spies across centuries trusted homophonic substitution for covert operations, as its resistance to frequency analysis kept secrets buried deep.</p>
+            </div>
+            
+            <div class="card">
+                <h3>📚 Educational Foundation</h3>
+                <p>A cornerstone for teaching cryptographic principles—frequency analysis, randomization, and the evolution from classical to quantum encryption.</p>
+            </div>
+            
+            <div class="card">
+                <h3>🔬 Modern Cryptographic Research</h3>
+                <p>Homophonic principles echo in contemporary algorithms, teaching us how to flatten statistical patterns and strengthen digital security.</p>
+            </div>
+            
+            <div class="card">
+                <h3>🎮 Interactive Puzzles</h3>
+                <p>Escape rooms, ARGs, and educational games employ homophonic ciphers to create challenging yet solvable cryptographic mysteries.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advantages Section -->
+    <section id="advantages">
+        <h2>The Cipher's Strengths</h2>
+        <div class="card">
+            <div class="grid">
+                <div class="feature-box">
+                    <div class="icon">🛡️</div>
+                    <h3>Impervious to Analysis</h3>
+                    <p>Defeats frequency analysis by distributing cipher symbols evenly, rendering statistical attacks powerless.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <div class="icon">🔀</div>
+                    <h3>Pattern Obliteration</h3>
+                    <p>Identical letters transform differently each time, eliminating recognizable patterns that betray simple ciphers.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <div class="icon">💪</div>
+                    <h3>Superior Security</h3>
+                    <p>Vastly stronger than monoalphabetic substitution while remaining more accessible than polyalphabetic complexity.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <div class="icon">⚖️</div>
+                    <h3>Balanced Distribution</h3>
+                    <p>Creates uniform frequency patterns in ciphertext, making common letters indistinguishable from rare ones.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <div class="icon">🎲</div>
+                    <h3>Randomization Layer</h3>
+                    <p>Incorporates true randomness into encryption, adding unpredictability even with identical keys and messages.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <div class="icon">📖</div>
+                    <h3>Pedagogical Excellence</h3>
+                    <p>Perfect for teaching confusion principles, statistical security, and the historical evolution of cryptography.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <div class="icon">🔧</div>
+                    <h3>Adjustable Security</h3>
+                    <p>Customize strength by varying homophone counts—more disguises per letter equals exponentially stronger protection.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <div class="icon">⏱️</div>
+                    <h3>Elegant Simplicity</h3>
+                    <p>Achieves remarkable security with moderate complexity, balancing ease of implementation with cryptographic strength.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simulation Section -->
+    <section id="simulation">
+        <h2>Interactive Simulation Chamber</h2>
+        
+        <div class="simulator">
+            <h3 style="text-align: center; color: var(--gold); font-size: 2rem; margin-bottom: 2rem;">🔮 Cipher Simulator 🔮</h3>
+            
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <button onclick="generateNewKey()" style="background: linear-gradient(135deg, var(--gold), var(--accent)); color: var(--deep-purple); font-size: 1.1rem; padding: 1rem 3rem;">
+                    🔑 Forge New Cipher Key
+                </button>
+            </div>
+
+            <!-- Cipher Key Display -->
+            <div class="key-display" id="keyDisplay" style="display: none;">
+                <h4 style="color: var(--gold); margin-bottom: 1rem;">📜 Sacred Cipher Key Mapping:</h4>
+                <pre id="keyContent"></pre>
+            </div>
+
+            <!-- Encryption and Decryption Boxes -->
+            <div class="simulator-grid">
+                <!-- Encryption Box -->
+                <div class="simulator-box">
+                    <h3 style="text-align: center; margin-bottom: 1.5rem;">🔒 Encryption Chamber</h3>
+                    
+                    <div class="input-group">
+                        <label for="encryptInput">Inscribe Your Secret Message:</label>
+                        <textarea id="encryptInput" placeholder="Enter plaintext to conceal... (e.g., HELLO WORLD)"></textarea>
+                    </div>
+
+                    <div class="button-group" style="justify-content: center;">
+                        <button onclick="performEncryption()">🔐 Encrypt</button>
+                        <button onclick="clearEncryption()" style="background: linear-gradient(135deg, #8b0000, #ff0000); border-color: #ff4444;">🗑️ Clear</button>
+                    </div>
+
+                    <!-- Animation Container for Encryption -->
+                    <div class="animation-container" id="encryptAnimation"></div>
+
+                    <div class="input-group">
+                        <label for="encryptOutput">Encrypted Ciphertext:</label>
+                        <textarea id="encryptOutput" readonly placeholder="Your concealed message appears here..."></textarea>
+                    </div>
+
+                    <button onclick="copyEncrypted()" style="width: 100%;">📋 Copy Ciphertext</button>
+                </div>
+
+                <!-- Decryption Box -->
+                <div class="simulator-box">
+                    <h3 style="text-align: center; margin-bottom: 1.5rem;">🔓 Decryption Chamber</h3>
+                    
+                    <div class="input-group">
+                        <label for="decryptInput">Present the Encrypted Message:</label>
+                        <textarea id="decryptInput" placeholder="Enter ciphertext to reveal... (e.g., 23 45 67)"></textarea>
+                    </div>
+
+                    <div class="button-group" style="justify-content: center;">
+                        <button onclick="performDecryption()">🔓 Decrypt</button>
+                        <button onclick="clearDecryption()" style="background: linear-gradient(135deg, #8b0000, #ff0000); border-color: #ff4444;">🗑️ Clear</button>
+                    </div>
+
+                    <!-- Animation Container for Decryption -->
+                    <div class="animation-container" id="decryptAnimation"></div>
+
+                    <div class="input-group">
+                        <label for="decryptOutput">Revealed Plaintext:</label>
+                        <textarea id="decryptOutput" readonly placeholder="The truth shall be unveiled here..."></textarea>
+                    </div>
+
+                    <button onclick="copyDecrypted()" style="width: 100%;">📋 Copy Plaintext</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">⚔️ Homophonic Substitution Cipher Simulator ⚔️</p>
+        <p style="font-style: italic; opacity: 0.8;">"In cryptography we trust, in randomness we confide"</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">&copy; 2025 • Crafted for the Guardians of Secrets</p>
+    </footer>
+
+    <script>
+        // Cipher key storage
+        let cipherKey = {};
+        let reverseKey = {};
+
+        // Famous cryptography quotes
+        const quotes = [
+            '"The cipher shall conceal what the soul desires to hide." — Unknown',
+            '"In codes and ciphers, truth finds sanctuary from prying eyes." — Ancient Wisdom',
+            '"Cryptography: The art of saying nothing while appearing to say something." — Anonymous',
+            '"Security through obscurity is no security; security through mathematics is eternal." — Modern Cryptographer',
+            '"What one man can invent, another can discover—unless randomness intervenes." — Sherlock Holmes (adapted)',
+            '"The Great Cipher of Louis XIV remained unbroken for 200 years." — Historical Record'
+        ];
+
+        let currentQuoteIndex = 0;
+
+        // Animate background elements
+        function initializeBackground() {
+            // Create floating cryptographic symbols
+            const symbolsLayer = document.getElementById('symbolsLayer');
+            const symbols = ['⚿', '⚾', '⛛', '⛝', '⚐', '⚑', '⚒', '§', '¶', '†', '‡', '◊', '⌘', '⍟', '⎈', 'Ω', 'Φ', 'Ψ', '∞', '∑'];
+            
+            for (let i = 0; i < 30; i++) {
+                const symbol = document.createElement('div');
+                symbol.className = 'crypto-symbol';
+                symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                symbol.style.left = Math.random() * 100 + '%';
+                symbol.style.animationDelay = Math.random() * 20 + 's';
+                symbol.style.animationDuration = (15 + Math.random() * 15) + 's';
+                symbolsLayer.appendChild(symbol);
+            }
+
+            // Create binary streams
+            const binaryLayer = document.getElementById('binaryLayer');
+            for (let i = 0; i < 20; i++) {
+                const stream = document.createElement('div');
+                stream.className = 'binary-stream';
+                let binaryText = '';
+                for (let j = 0; j < 50; j++) {
+                    binaryText += Math.random() > 0.5 ? '1' : '0';
+                    if (j % 8 === 7) binaryText += ' ';
+                }
+                stream.textContent = binaryText;
+                stream.style.left = (i * 5) + '%';
+                stream.style.animationDelay = Math.random() * 10 + 's';
+                stream.style.animationDuration = (10 + Math.random() * 10) + 's';
+                binaryLayer.appendChild(stream);
+            }
+
+            // Create lock and key icons
+            const securityIcons = document.getElementById('securityIcons');
+            const lockPositions = [
+                {top: '15%', left: '10%'},
+                {top: '25%', left: '85%'},
+                {top: '60%', left: '15%'},
+                {top: '70%', left: '80%'}
+            ];
+
+            lockPositions.forEach((pos, i) => {
+                const lock = document.createElement('div');
+                lock.className = 'lock-icon';
+                lock.textContent = i % 2 === 0 ? '🔒' : '🔑';
+                lock.style.top = pos.top;
+                lock.style.left = pos.left;
+                lock.style.animationDelay = (i * 2) + 's';
+                securityIcons.appendChild(lock);
+            });
+
+            // Rotate quotes
+            const quoteOverlay = document.getElementById('quoteOverlay');
+            setInterval(() => {
+                quoteOverlay.style.animation = 'none';
+                setTimeout(() => {
+                    currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+                    quoteOverlay.textContent = quotes[currentQuoteIndex];
+                    quoteOverlay.style.animation = 'fadeQuote 15s ease-in-out infinite';
+                }, 100);
+            }, 15000);
+            quoteOverlay.textContent = quotes[0];
+
+            // Animate interactive cipher
+            const chars = ['A', 'B', 'C', 'E', 'H', 'T', 'O', 'S'];
+            const nums = ['23', '15', '42', '07', '91', '38', '64', '55'];
+            let charIndex = 0;
+
+            setInterval(() => {
+                charIndex = (charIndex + 1) % chars.length;
+                document.getElementById('char1').textContent = chars[charIndex];
+                document.getElementById('char2').textContent = nums[charIndex];
+            }, 3000);
+        }
+
+        // Generate homophonic cipher key
+        function generateNewKey() {
+            cipherKey = {};
+            reverseKey = {};
+            
+            const frequencies = {
+                'E': 13, 'T': 9, 'A': 8, 'O': 8, 'I': 7, 'N': 7, 'S': 6, 'H': 6,
+                'R': 6, 'D': 4, 'L': 4, 'C': 3, 'U': 3, 'M': 2, 'W': 2, 'F': 2,
+                'G': 2, 'Y': 2, 'P': 2, 'B': 1, 'V': 1, 'K': 1, 'J': 1, 'X': 1,
+                'Q': 1, 'Z': 1
+            };
+            
+            let currentNumber = 1;
+            
+            for (let letter in frequencies) {
+                cipherKey[letter] = [];
+                const count = frequencies[letter];
+                
+                for (let i = 0; i < count; i++) {
+                    const num = String(currentNumber).padStart(2, '0');
+                    cipherKey[letter].push(num);
+                    reverseKey[num] = letter;
+                    currentNumber++;
+                }
+            }
+            
+            cipherKey[' '] = ['00'];
+            reverseKey['00'] = ' ';
+            
+            displayKey();
+            alert('✨ A new cipher key has been forged! The path to encryption is now open.');
+        }
+
+        function displayKey() {
+            const keyDisplay = document.getElementById('keyDisplay');
+            const keyContent = document.getElementById('keyContent');
+            
+            let keyText = '';
+            const sortedLetters = Object.keys(cipherKey).sort();
+            
+            for (let letter of sortedLetters) {
+                if (letter === ' ') {
+                    keyText += 'SPACE → ' + cipherKey[letter].join(', ') + '\n';
+                } else {
+                    keyText += letter + ' → ' + cipherKey[letter].join(', ') + '\n';
+                }
+            }
+            
+            keyContent.textContent = keyText;
+            keyDisplay.style.display = 'block';
+        }
+
+        async function performEncryption() {
+            if (Object.keys(cipherKey).length === 0) {
+                alert('⚠️ No cipher key exists! Forging one now...');
+                generateNewKey();
+                return;
+            }
+            
+            const plaintext = document.getElementById('encryptInput').value.toUpperCase();
+            
+            if (!plaintext.trim()) {
+                alert('⚠️ Please inscribe a message to encrypt!');
+                return;
+            }
+            
+            const animationContainer = document.getElementById('encryptAnimation');
+            animationContainer.innerHTML = '<p style="color: var(--gold); font-size: 1.2rem;">🔄 Weaving encryption magic...</p>';
+            
+            let encrypted = [];
+            
+            for (let i = 0; i < plaintext.length; i++) {
+                const char = plaintext[i];
+                
+                animationContainer.innerHTML = `
+                    <div class="process-step active">
+                        <p style="color: var(--light-gold); margin-bottom: 1rem;">Encrypting character ${i + 1} of ${plaintext.length}</p>
+                        <div class="char-animation">${char}</div>
+                        <div class="arrow">↓</div>
+                `;
+                
+                await sleep(300);
+                
+                if (cipherKey[char]) {
+                    const homophones = cipherKey[char];
+                    const randomIndex = Math.floor(Math.random() * homophones.length);
+                    const cipherSymbol = homophones[randomIndex];
+                    encrypted.push(cipherSymbol);
+                    
+                    animationContainer.innerHTML += `
+                        <div class="char-animation" style="background: rgba(123, 44, 191, 0.3); border-color: var(--cyber-blue);">${cipherSymbol}</div>
+                    </div>`;
+                    
+                } else {
+                    encrypted.push('XX');
+                    animationContainer.innerHTML += `
+                        <div class="char-animation" style="background: rgba(139, 0, 0, 0.3); border-color: #ff4444;">XX</div>
+                    </div>`;
+                }
+                
+                await sleep(300);
+            }
+            
+            animationContainer.innerHTML = `
+                <div class="process-step active">
+                    <div style="font-size: 3rem; margin: 1rem;">✨</div>
+                    <p style="color: var(--gold); font-size: 1.3rem; font-weight: bold;">Encryption Complete!</p>
+                    <p style="color: var(--light-gold); margin-top: 0.5rem;">Your message is now cloaked in mystery</p>
+                </div>
+            `;
+            
+            document.getElementById('encryptOutput').value = encrypted.join(' ');
+        }
+
+        async function performDecryption() {
+            if (Object.keys(reverseKey).length === 0) {
+                alert('⚠️ No cipher key exists! Please forge one first.');
+                return;
+            }
+            
+            const ciphertext = document.getElementById('decryptInput').value.trim();
+            
+            if (!ciphertext) {
+                alert('⚠️ Please present the ciphertext to decrypt!');
+                return;
+            }
+            
+            const animationContainer = document.getElementById('decryptAnimation');
+            animationContainer.innerHTML = '<p style="color: var(--gold); font-size: 1.2rem;">🔄 Unveiling hidden truths...</p>';
+            
+            const numbers = ciphertext.split(' ').filter(n => n.length > 0);
+            let decrypted = '';
+            
+            for (let i = 0; i < numbers.length; i++) {
+                const num = numbers[i];
+                
+                animationContainer.innerHTML = `
+                    <div class="process-step active">
+                        <p style="color: var(--light-gold); margin-bottom: 1rem;">Decrypting symbol ${i + 1} of ${numbers.length}</p>
+                        <div class="char-animation" style="background: rgba(123, 44, 191, 0.3); border-color: var(--cyber-blue);">${num}</div>
+                        <div class="arrow">↓</div>
+                `;
+                
+                await sleep(300);
+                
+                if (reverseKey[num]) {
+                    const plainChar = reverseKey[num];
+                    decrypted += plainChar;
+                    
+                    animationContainer.innerHTML += `
+                        <div class="char-animation">${plainChar}</div>
+                    </div>`;
+                } else {
+                    decrypted += '?';
+                    animationContainer.innerHTML += `
+                        <div class="char-animation" style="background: rgba(139, 0, 0, 0.3); border-color: #ff4444;">?</div>
+                    </div>`;
+                }
+                
+                await sleep(300);
+            }
+            
+            animationContainer.innerHTML = `
+                <div class="process-step active">
+                    <div style="font-size: 3rem; margin: 1rem;">🔓</div>
+                    <p style="color: var(--gold); font-size: 1.3rem; font-weight: bold;">Decryption Complete!</p>
+                    <p style="color: var(--light-gold); margin-top: 0.5rem;">The secret message stands revealed</p>
+                </div>
+            `;
+            
+            document.getElementById('decryptOutput').value = decrypted;
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function clearEncryption() {
+            document.getElementById('encryptInput').value = '';
+            document.getElementById('encryptOutput').value = '';
+            document.getElementById('encryptAnimation').innerHTML = '';
+        }
+
+        function clearDecryption() {
+            document.getElementById('decryptInput').value = '';
+            document.getElementById('decryptOutput').value = '';
+            document.getElementById('decryptAnimation').innerHTML = '';
+        }
+
+        function copyEncrypted() {
+            const encryptOutput = document.getElementById('encryptOutput');
+            if (!encryptOutput.value) {
+                alert('⚠️ No encrypted text to copy!');
+                return;
+            }
+            encryptOutput.select();
+            document.execCommand('copy');
+            alert('✅ Ciphertext copied to your scroll!');
+        }
+
+        function copyDecrypted() {
+            const decryptOutput = document.getElementById('decryptOutput');
+            if (!decryptOutput.value) {
+                alert('⚠️ No decrypted text to copy!');
+                return;
+            }
+            decryptOutput.select();
+            document.execCommand('copy');
+            alert('✅ Plaintext copied to your scroll!');
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            initializeBackground();
+            generateNewKey();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                if (document.activeElement.id === 'encryptInput') {
+                    performEncryption();
+                } else if (document.activeElement.id === 'decryptInput') {
+                    performDecryption();
+                }
+            }
+        });
+
+        // Add parallax effect to background elements
+        let lastScrollY = 0;
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const symbolsLayer = document.getElementById('symbolsLayer');
+            const securityIcons = document.getElementById('securityIcons');
+            
+            if (symbolsLayer) {
+                symbolsLayer.style.transform = `translateY(${scrollY * 0.3}px)`;
+            }
+            if (securityIcons) {
+                securityIcons.style.transform = `translateY(${scrollY * 0.2}px)`;
+            }
+            
+            lastScrollY = scrollY;
+        });
+
+        // Add mouse movement interaction
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            const interactiveCipher = document.getElementById('interactiveCipher');
+            if (interactiveCipher) {
+                const moveX = (x - 0.5) * 20;
+                const moveY = (y - 0.5) * 20;
+                interactiveCipher.style.transform = `translate(calc(-50% + ${moveX}px), ${moveY}px)`;
+            }
+        });
+
+        // Add particle effect on hover for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mouseenter', function(e) {
+                this.style.transition = 'all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            });
+        });
+
+        // Easter egg: Konami code for special effect
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode.splice(-konamiSequence.length - 1, konamiCode.length - konamiSequence.length);
+            
+            if (konamiCode.join('').includes(konamiSequence.join(''))) {
+                activateSpecialEffect();
+                konamiCode = [];
+            }
+        });
+
+        function activateSpecialEffect() {
+            const body = document.body;
+            body.style.animation = 'rainbow 2s linear infinite';
+            
+            // Create special message
+            const specialMsg = document.createElement('div');
+            specialMsg.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 10000;
+                font-size: 3rem;
+                color: var(--gold);
+                text-shadow: 0 0 30px var(--gold);
+                animation: pulse 1s ease-in-out 3;
+                pointer-events: none;
+            `;
+            specialMsg.textContent = '🔐 Master Cryptographer Unlocked! 🔐';
+            document.body.appendChild(specialMsg);
+            
+            setTimeout(() => {
+                specialMsg.remove();
+                body.style.animation = '';
+            }, 3000);
+        }
+
+        // Add style for rainbow animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rainbow {
+                0% { filter: hue-rotate(0deg); }
+                100% { filter: hue-rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Performance optimization: Pause animations when tab is not visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                document.querySelectorAll('.crypto-symbol, .binary-stream, .lock-icon, .key-icon').forEach(el => {
+                    el.style.animationPlayState = 'paused';
+                });
+            } else {
+                document.querySelectorAll('.crypto-symbol, .binary-stream, .lock-icon, .key-icon').forEach(el => {
+                    el.style.animationPlayState = 'running';
+                });
+            }
+        });
+
+        // Add typing effect for hero subtitle on first load
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.textContent = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Initialize typing effect
+        window.addEventListener('load', () => {
+            const subtitle = document.querySelector('.subtitle');
+            if (subtitle) {
+                const originalText = subtitle.textContent;
+                setTimeout(() => typeWriter(subtitle, originalText, 80), 500);
+            }
+        });
+
+        // Add glow effect to navigation on scroll
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            nav.style.boxShadow = '0 2px 40px rgba(255, 215, 0, 0.4)';
+            
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                nav.style.boxShadow = '0 2px 30px rgba(255, 215, 0, 0.2)';
+            }, 150);
+        });
+
+        // Add ripple effect to cards on click
+        document.querySelectorAll('.card, .feature-box').forEach(card => {
+            card.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    animation: rippleEffect 0.6s ease-out;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Add ripple animation
+        const rippleStyle = document.createElement('style');
+        rippleStyle.textContent = `
+            @keyframes rippleEffect {
+                from {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(rippleStyle);
+
+        // Add success notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'rgba(0, 255, 136, 0.2)' : 'rgba(255, 68, 68, 0.2)';
+            const borderColor = type === 'success' ? 'var(--gold)' : '#ff4444';
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 1.5rem 2rem;
+                background: ${bgColor};
+                border: 2px solid ${borderColor};
+                border-radius: 10px;
+                color: var(--light-gold);
+                font-weight: 600;
+                z-index: 10000;
+                box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+                animation: slideIn 0.3s ease-out;
+                backdrop-filter: blur(10px);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add slide animations for notifications
+        const notificationStyle = document.createElement('style');
+        notificationStyle.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(notificationStyle);
+
+        // Update copy functions to use notifications
+        window.copyEncrypted = function() {
+            const encryptOutput = document.getElementById('encryptOutput');
+            if (!encryptOutput.value) {
+                showNotification('⚠️ No encrypted text to copy!', 'error');
+                return;
+            }
+            encryptOutput.select();
+            document.execCommand('copy');
+            showNotification('✨ Ciphertext copied to clipboard!');
+        };
+
+        window.copyDecrypted = function() {
+            const decryptOutput = document.getElementById('decryptOutput');
+            if (!decryptOutput.value) {
+                showNotification('⚠️ No decrypted text to copy!', 'error');
+                return;
+            }
+            decryptOutput.select();
+            document.execCommand('copy');
+            showNotification('✨ Plaintext copied to clipboard!');
+        };
+
+        // Add progress indicator for long encryptions
+        function updateProgress(current, total) {
+            const percent = (current / total) * 100;
+            // Visual feedback for progress
+            console.log(`Progress: ${percent.toFixed(0)}%`);
+        }
+
+        // Add sound effects (optional - can be uncommented if audio files are available)
+        function playSound(type) {
+            // Placeholder for sound effects
+            // const audio = new Audio(`/sounds/${type}.mp3`);
+            // audio.volume = 0.3;
+            // audio.play().catch(e => console.log('Audio play failed'));
+        }
+
+        // Log initialization
+        console.log('%c🔐 Homophonic Cipher Simulator Initialized', 'color: #ffd700; font-size: 16px; font-weight: bold;');
+        console.log('%cTry the Konami code for a surprise! ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️BA', 'color: #00d4ff; font-style: italic;');
+    </script>
+</body>
+</html>
